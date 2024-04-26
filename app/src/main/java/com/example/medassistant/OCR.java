@@ -60,7 +60,6 @@ public class OCR extends AppCompatActivity {
     private static final int STORAGE_REQUEST_CODE = 101;
 
     private String[] cameraPermissions;
-    private String[] storagePermissions;
 
     private ProgressDialog progressDialog;
 
@@ -83,7 +82,7 @@ public class OCR extends AppCompatActivity {
         recognizedTextEt = findViewById(R.id.recognizedTextEt);
 
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+//        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Please Wait....");
