@@ -11,8 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -78,7 +81,33 @@ public class OCR extends AppCompatActivity {
     }
 
     private void showInputImageDialog() {
+        PopupMenu popupMenu = new PopupMenu(this, inputButton);
 
+        popupMenu.getMenu().add(Menu.NONE, 1, 1, "CAMERA");
+        popupMenu.getMenu().add(Menu.NONE, 2, 2, "GALLERY");
+
+        popupMenu.show();
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                
+                if (id == 1) {
+
+                    if (checkCameraPermissions()) pickImageCamera();
+                    else requestCameraPermissions();
+
+                } else if (id == 2) {
+
+                    if (checkStoragePermission()) pickImageGallery();
+                    else requestStoragePermission();
+
+                }
+
+                return true;
+            }
+        });
 
     }
 
@@ -148,6 +177,10 @@ public class OCR extends AppCompatActivity {
             Log.i(TAG, "Camera && Storage Permissions Granted!!");
         }
         return cameraResult && storageResult;
+    }
+
+    private void requestCameraPermissions() {
+        ActivityCompat.requestPermissions(this, cameraPermissions, CAMERA_REQUEST_CODE);
     }
 
     @Override
