@@ -9,6 +9,8 @@ activity = "1.8.0"
 constraintlayout = "2.1.4"
 
 [libraries]
+google-services = "com.google.gms:google-services:4.4.1"
+firebase-auth = "com.google.firebase:firebase-auth:22.3.1"
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
