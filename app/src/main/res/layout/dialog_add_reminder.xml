@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/titleEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Title" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose Days"
+        android:layout_marginTop="50dp"
+        android:textSize="20dp"/>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/day_of_week_1"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="M"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_2"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="T"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_3"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="W"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_4"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:padding="4dp"
+            android:text="T"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_5"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="F"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_6"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/day_of_week_7"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:padding="4dp"
+            android:background="?selectableItemBackground"
+            android:clickable="true"
+            android:textColor="@color/black"
+            style="?android:attr/buttonBarButtonStyle" />
+    </LinearLayout>
+
+</LinearLayout>

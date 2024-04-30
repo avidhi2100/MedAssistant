@@ -35,9 +35,9 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
-
+    implementation libs.jackson.databind
     implementation libs.firebase.auth
-    implementation platform('com.google.firebase:firebase-bom:32.8.1')
+    implementation platform(libs.firebase.bom)
 
     //Google ML Lib
     implementation libs.text.recognition // 'com.google.mlkit:text-recognition:16.0.0'
