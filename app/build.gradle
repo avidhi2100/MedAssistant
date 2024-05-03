@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -34,6 +35,13 @@ dependencies {
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
+    implementation libs.jackson.databind
+    implementation libs.firebase.auth
+    implementation platform(libs.firebase.bom)
+
+    //Google ML Lib
+    implementation libs.text.recognition // 'com.google.mlkit:text-recognition:16.0.0'
+
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core

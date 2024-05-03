@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_home"
+        android:title=""
+        android:icon="@android:drawable/ic_popup_reminder"
+        android:iconTint="@color/white"/>
+
+    <item
+        android:id="@+id/menu_ocr"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_camera"
+        android:iconTint="@color/white"
+        />
+
+    <item
+        android:id="@+id/menu_chat"
+        android:title=""
+        android:icon="@android:drawable/stat_notify_chat"
+        android:iconTint="@color/white"/>
+</menu>
