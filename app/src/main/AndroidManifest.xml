@@ -38,6 +38,12 @@
             android:name=".ChatbotInterfaceActivity"
             android:exported="false" />
         <activity
+            android:name=".MedicineDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MedicinesActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

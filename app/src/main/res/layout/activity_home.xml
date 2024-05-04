@@ -15,23 +15,13 @@
         android:layout_marginBottom="130dp"
         android:layout_marginTop="150dp" />
 
-
-    <Button
-        android:id="@+id/btnAddReminder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottomNavigation"
-        android:layout_marginStart="130dp"
-        android:layout_marginBottom="503dp"
-        android:onClick="addReminder"
-        android:text="Add Reminder" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@color/green"
+        app:itemHorizontalTranslationEnabled="false"
+        android:background="@android:color/darker_gray"
         app:menu="@menu/bottom_navigation_menu" />
 
     <TextView

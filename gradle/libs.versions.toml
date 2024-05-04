@@ -1,5 +1,6 @@
 [versions]
 agp = "8.3.1"
+clamp = "1.4.0"
 firebaseBom = "32.8.1"
 gson = "2.10.1"
 jacksonDatabind = "2.15.4"
@@ -10,9 +11,14 @@ appcompat = "1.6.1"
 material = "1.11.0"
 activity = "1.8.0"
 constraintlayout = "2.1.4"
+medtagger = "1.0.72"
+medTaggerVersion = "1.5.0"
+medxnCore = "1.5.0"
+stanfordCorenlp = "4.5.7"
 textRecognition = "16.0.0"
 
 [libraries]
+clamp = { module = "edu.uth.clamp:clamp", version.ref = "clamp" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-services = "com.google.gms:google-services:4.4.1"
 firebase-auth = "com.google.firebase:firebase-auth:22.3.1"
@@ -25,6 +31,10 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+med-tagger = { module = "edu.uth.clamp:med-tagger", version.ref = "medTaggerVersion" }
+medtagger = { module = "org.ohnlp.medtagger:medtagger", version.ref = "medtagger" }
+medxn-core = { module = "com.ibm.medxn:medxn-core", version.ref = "medxnCore" }
+stanford-corenlp = { module = "edu.stanford.nlp:stanford-corenlp", version.ref = "stanfordCorenlp" }
 text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "textRecognition" }
 
 [plugins]

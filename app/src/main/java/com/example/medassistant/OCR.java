@@ -72,6 +72,8 @@ public class OCR extends AppCompatActivity {
 
     private TextRecognizer textRecognizer;
 
+//    CTakesMain medTagger;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,9 +132,12 @@ public class OCR extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Text>() {
                         @Override
                         public void onSuccess(Text text) {
+
                             progressDialog.dismiss();
 
                             String detectedText = text.getText();
+
+
                             Log.d(TAG, "onSuccess:recognizeText --> " + detectedText);
                             recognizedTextEt.setText(detectedText);
 
