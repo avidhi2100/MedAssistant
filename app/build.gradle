@@ -38,6 +38,7 @@ dependencies {
     implementation libs.jackson.databind
     implementation libs.firebase.auth
     implementation platform(libs.firebase.bom)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     //Google ML Lib
     implementation libs.text.recognition // 'com.google.mlkit:text-recognition:16.0.0'

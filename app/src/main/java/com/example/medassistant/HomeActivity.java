@@ -78,8 +78,9 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             } else if (menuItem.getItemId() == R.id.menu_chat) {
-                // Handle Chat button click
-                Toast.makeText(HomeActivity.this, "Chat clicked", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, ChatbotInterfaceActivity.class);
+                startActivity(intent);
+//                Toast.makeText(HomeActivity.this, "Chat clicked", Toast.LENGTH_SHORT).show();
                 return true;
             }
             return false;
