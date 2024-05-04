@@ -3,9 +3,7 @@ package com.example.medassistant;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -17,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -64,6 +61,8 @@ public class OCR extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private TextRecognizer textRecognizer;
+
+//    CTakesMain medTagger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,9 +122,12 @@ public class OCR extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Text>() {
                         @Override
                         public void onSuccess(Text text) {
+
                             progressDialog.dismiss();
 
                             String detectedText = text.getText();
+
+
                             Log.d(TAG, "onSuccess:recognizeText --> " + detectedText);
                             recognizedTextEt.setText(detectedText);
                         }

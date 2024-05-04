@@ -8,11 +8,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.example.medassistant.entity.Medicine;
 import com.example.medassistant.entity.Reminder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
@@ -20,6 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "reminders.db";
     private static final int DATABASE_VERSION = 1;
 
+    //Reminders Table
     private static final String TABLE_REMINDERS = "reminders";
     private static final String COLUMN_ID = "_id";
     private static final String COLUMN_TITLE = "title";
@@ -27,6 +30,17 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_FREQUENCY = "frequency";
     private static final String COLUMN_ENABLED = "enabled";
     private static final String COLUMN_USER_EMAIL = "userEmail";
+
+    //Medicine Table
+    private static final String TABLE_MEDICINE = "medicines";
+    private static final String M_COLUMN_ID = "_id";
+    private static final String MEDICINE_NAME = "medicineName";
+    private static final String MEDICINE_DOSAGE = "medicineDosage";
+    private static final String MEDICINE_ROUTE = "medicineRoute";
+    private static final String MEDICINE_REFILL_DATE = "refillDate";
+
+    private static final String MEDICINE_DOCTOR_NAME = "doctorName";
+    private static final String MEDICINE_USER = "userEmail";
 
     private ObjectMapper objectMapper = new ObjectMapper();
     public DBHelper(Context context) {
@@ -42,13 +56,25 @@ public class DBHelper extends SQLiteOpenHelper {
                 COLUMN_FREQUENCY + " TEXT, " +
                 COLUMN_USER_EMAIL + " TEXT, " +
                 COLUMN_ENABLED + " INTEGER)";
+
+        String createTableQuery2 = "CREATE TABLE " + TABLE_MEDICINE + "(" +
+                M_COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                MEDICINE_NAME + " TEXT, " +
+                MEDICINE_DOSAGE+ " TEXT, " +
+                MEDICINE_ROUTE + " TEXT, " +
+                MEDICINE_REFILL_DATE + " TEXT, " +
+                MEDICINE_DOCTOR_NAME + " TEXT, " +
+                MEDICINE_USER + " TEXT)";
+
         db.execSQL(createTableQuery);
+        db.execSQL(createTableQuery2);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d("DBHelper", "Upgrading database from version " + oldVersion + " to " + newVersion);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDICINE);
         onCreate(db);
 
     }
@@ -115,5 +141,65 @@ public class DBHelper extends SQLiteOpenHelper {
         db.update(TABLE_REMINDERS, values, whereClause, whereArgs);
         db.close();
     }
+
+    public void addMedicine(Medicine medicine) throws JsonProcessingException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(MEDICINE_NAME, medicine.getMedicineName());
+        values.put(MEDICINE_DOSAGE, medicine.getMedicineDosage()); // no need to convert to string
+        values.put(MEDICINE_ROUTE, medicine.getRoute()); // convert to json string
+        values.put(MEDICINE_REFILL_DATE, medicine.getRefillDate());
+        values.put(MEDICINE_DOCTOR_NAME, medicine.getDoctorName());
+        values.put(MEDICINE_USER, medicine.getUserEmail());
+        db.insert(TABLE_REMINDERS, null, values);
+        db.close();
+    }
+
+    @SuppressLint("Range")
+    public List<Medicine> getAllMedicines(String userEmail) throws JsonProcessingException {
+        List<Medicine> medicines = new ArrayList<>();
+        String selectAllQuery = "SELECT * FROM " + TABLE_MEDICINE + " WHERE userEmail=?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectAllQuery, new String[]{userEmail});
+
+        if (cursor.moveToFirst()) {
+            do {
+                Medicine medicine = new Medicine();
+
+                medicine.setId(cursor.getInt(cursor.getColumnIndex(M_COLUMN_ID)));
+                medicine.setMedicineName(cursor.getString(cursor.getColumnIndex(MEDICINE_NAME)));
+                medicine.setRoute(cursor.getString(cursor.getColumnIndex(MEDICINE_ROUTE)));
+                medicine.setRefillDate(cursor.getString(cursor.getColumnIndex(MEDICINE_REFILL_DATE)));
+                medicine.setDoctorName(cursor.getString(cursor.getColumnIndex(MEDICINE_DOCTOR_NAME)));
+                medicine.setUserEmail(cursor.getString(cursor.getColumnIndex(MEDICINE_USER)));
+                medicines.add(medicine);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return medicines;
+    }
+
+    @SuppressLint("Range")
+    public Medicine getMedicineById(Long id) {
+        Medicine medicine = new Medicine();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_MEDICINE, null, M_COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            medicine = new Medicine();
+            medicine.setId(cursor.getInt(cursor.getColumnIndex(M_COLUMN_ID)));
+            medicine.setMedicineName(cursor.getString(cursor.getColumnIndex(MEDICINE_NAME)));
+            medicine.setRoute(cursor.getString(cursor.getColumnIndex(MEDICINE_ROUTE)));
+            medicine.setRefillDate(cursor.getString(cursor.getColumnIndex(MEDICINE_REFILL_DATE)));
+            medicine.setDoctorName(cursor.getString(cursor.getColumnIndex(MEDICINE_DOCTOR_NAME)));
+            medicine.setUserEmail(cursor.getString(cursor.getColumnIndex(MEDICINE_USER)));
+            cursor.close();
+        }
+        db.close();
+        return medicine;
+    }
+
+
 
 }
