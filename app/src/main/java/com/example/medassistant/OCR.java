@@ -32,16 +32,25 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.medassistant.database.DBHelper;
+import com.example.medassistant.entity.Medicine;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -59,6 +68,7 @@ public class OCR extends AppCompatActivity {
     private MaterialButton inputButton;
     private ShapeableImageView imageView;
     private EditText recognizedTextEt;
+    DBHelper dbHelper;
 
     private static final String TAG = "OCR_ACTIVITY_TAG";
     private Uri imageUri = null;
@@ -71,6 +81,7 @@ public class OCR extends AppCompatActivity {
     private ProgressDialog progressDialog;
 
     private TextRecognizer textRecognizer;
+    FirebaseAuth auth;
 
 //    CTakesMain medTagger;
 
@@ -85,6 +96,7 @@ public class OCR extends AppCompatActivity {
             return insets;
         });
 
+        auth = FirebaseAuth.getInstance();
         inputButton = findViewById(R.id.inputImageBtn);
         MaterialButton recognizeTextBtn = findViewById(R.id.recognizedTextBtn);
         imageView = findViewById(R.id.imageIv);
@@ -133,6 +145,8 @@ public class OCR extends AppCompatActivity {
                         @Override
                         public void onSuccess(Text text) {
 
+                            ObjectMapper objectMapper = new ObjectMapper();
+                            dbHelper = new DBHelper(OCR.this);
                             progressDialog.dismiss();
 
                             String detectedText = text.getText();
@@ -152,6 +166,16 @@ public class OCR extends AppCompatActivity {
                                         progressDialog.dismiss();
                                     }
                                     Log.d("OCRData", response);
+
+                                    JSONObject jsonObject = new JSONObject(response);
+                                    String responseData = jsonObject.getString("response");
+                                    Log.d("responseData",responseData);
+
+//                                    String jsonString ="{\n  \"medicineName\": \"AMOXICILLIN 500 MG\",\n  \"medicineDosage\": \"TAKE ONE CAPSULE\",\n  \"route\": \"MOUTH 2X PER DAY\",\n  \"refillDate\": \"12-01-2016\",\n  \"doctorName\": \"Dr. Auth Requiet\"\n}";
+                                    Medicine medicine = objectMapper.readValue(responseData, Medicine.class);
+                                    medicine.setUserEmail(Objects.requireNonNull(auth.getCurrentUser()).getEmail());
+                                    dbHelper.addMedicine(medicine);
+
                                 }).execute(detectedText);
                             } else {
                                 Toast.makeText(OCR.this, "OCR Failed", Toast.LENGTH_SHORT).show();
@@ -338,7 +362,7 @@ public class OCR extends AppCompatActivity {
     private static class CallOCRProcessAPI extends AsyncTask<String, Void, String> {
 
         public interface ResponseListener {
-            void onResponseReceived(String response);
+            void onResponseReceived(String response) throws JsonProcessingException, JSONException;
         }
 
         private final ResponseListener listener;
@@ -399,7 +423,12 @@ public class OCR extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            listener.onResponseReceived(s.trim());
+            try {
+                listener.onResponseReceived(s.trim());
+            } catch (JsonProcessingException | JSONException e) {
+                throw new RuntimeException(e);
+            }
+
         }
     }
 

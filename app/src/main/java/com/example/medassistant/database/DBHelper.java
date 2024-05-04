@@ -151,7 +151,7 @@ public class DBHelper extends SQLiteOpenHelper {
         values.put(MEDICINE_REFILL_DATE, medicine.getRefillDate());
         values.put(MEDICINE_DOCTOR_NAME, medicine.getDoctorName());
         values.put(MEDICINE_USER, medicine.getUserEmail());
-        db.insert(TABLE_REMINDERS, null, values);
+        db.insert(TABLE_MEDICINE, null, values);
         db.close();
     }
 

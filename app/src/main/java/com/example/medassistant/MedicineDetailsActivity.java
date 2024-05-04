@@ -71,8 +71,8 @@ public class MedicineDetailsActivity extends AppCompatActivity {
 
         Intent intent = this.getIntent();
         Long medicineId = intent.getLongExtra("medicineId", 0);
-//        Medicine medicine = dbHelper.getMedicineById(medicineId);
-        Medicine medicine = new Medicine(1,"Amoxylin","2x PER Day","ORAL","08-12-2024","Not present","vidhi0821@gmail.com");
+        Medicine medicine = dbHelper.getMedicineById(medicineId);
+//        Medicine medicine = new Medicine(1,"Amoxylin","2x PER Day","ORAL","08-12-2024","Not present","vidhi0821@gmail.com");
 
         textViewMedicineName.setText(medicine.getMedicineName());
         textViewMedicineDosage.setText(medicine.getMedicineDosage());
