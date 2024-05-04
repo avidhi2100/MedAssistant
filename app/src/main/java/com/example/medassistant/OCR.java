@@ -3,12 +3,11 @@ package com.example.medassistant;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -45,6 +43,15 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class OCR extends AppCompatActivity {
@@ -128,6 +135,23 @@ public class OCR extends AppCompatActivity {
                             String detectedText = text.getText();
                             Log.d(TAG, "onSuccess:recognizeText --> " + detectedText);
                             recognizedTextEt.setText(detectedText);
+
+                            if (!detectedText.isEmpty()){
+                                progressDialog = ProgressDialog.show(OCR.this,
+                                        "Understand Detected Test",
+                                        "Please Wait...",
+                                        true);
+
+                                new CallOCRProcessAPI(response -> {
+                                    if(progressDialog != null && progressDialog.isShowing()){
+                                        progressDialog.dismiss();
+                                    }
+                                    Log.d("OCRData", response);
+                                }).execute(detectedText);
+                            } else {
+                                Toast.makeText(OCR.this, "OCR Failed", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -305,5 +329,74 @@ public class OCR extends AppCompatActivity {
                 break;
         }
     }
+
+    private static class CallOCRProcessAPI extends AsyncTask<String, Void, String> {
+
+        public interface ResponseListener {
+            void onResponseReceived(String response);
+        }
+
+        private final ResponseListener listener;
+
+        private CallOCRProcessAPI(ResponseListener listener) {
+            this.listener = listener;
+        }
+        @Override
+        protected String doInBackground(@NonNull String... params) {
+            String urlString = "http://10.0.2.2:5000/ocr";
+
+            Log.d("pararm",params[0].replace("\n", ""));
+            String data = "{\"prompt\":\"" + params[0].replace("\n", "") + "\"}";
+            Log.d("data", data);
+            OutputStream out;
+
+            try {
+                URL url = new URL(urlString);
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                out = new BufferedOutputStream(urlConnection.getOutputStream());
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8));
+                writer.write(data);
+                writer.flush();
+                writer.close();
+                out.close();
+
+                urlConnection.connect();
+
+                int responseCode = urlConnection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                    String inputLine;
+                    StringBuilder response = new StringBuilder();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // Return the response
+                    return response.toString();
+                } else {
+                    // Handle server error here
+                    return "Server returned HTTP " + urlConnection.getResponseCode() + " " + urlConnection.getResponseMessage();
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                return e.getMessage();
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            listener.onResponseReceived(s.trim());
+        }
+    }
+
 
 }
