@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class MedicineDetailsActivity extends AppCompatActivity {
     Button friday;
     Button saturday;
     Button sunday;
+    ImageButton backButton;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -68,6 +70,14 @@ public class MedicineDetailsActivity extends AppCompatActivity {
         TextView textViewMedicineRoute = findViewById(R.id.routeTextView);
         TextView textViewMedicineRefillDate = findViewById(R.id.refillDateTextView);
         TextView textViewMedicineDoctorName = findViewById(R.id.doctorNameTextView);
+        backButton=findViewById(R.id.back_button);
+        backButton.setOnClickListener((v)->
+        {
+            Intent intent = new Intent(this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
 
         Intent intent = this.getIntent();
         Long medicineId = intent.getLongExtra("medicineId", 0);

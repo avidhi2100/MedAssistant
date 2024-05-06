@@ -1,5 +1,6 @@
 package com.example.medassistant;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class ChatbotInterfaceActivity extends AppCompatActivity {
     TextView welcomeView;
     EditText messageText;
     ImageButton sendButton;
+    ImageButton backButton;
     List<Message> messageList;
     MessageAdapter messageAdapter;
     String threadId="";
@@ -67,6 +69,7 @@ public class ChatbotInterfaceActivity extends AppCompatActivity {
         welcomeView=findViewById(R.id.welcome_text);
         messageText=findViewById(R.id.message_text);
         sendButton=findViewById(R.id.send_button);
+        backButton = findViewById(R.id.back_button);
 
         messageAdapter = new MessageAdapter(messageList);
         recycleView.setAdapter(messageAdapter);
@@ -74,6 +77,12 @@ public class ChatbotInterfaceActivity extends AppCompatActivity {
         llm.setStackFromEnd(true);
         recycleView.setLayoutManager(llm);
 
+backButton.setOnClickListener((v)->
+{
+    Intent intent = new Intent(this, HomeActivity.class);
+    startActivity(intent);
+    finish();
+});
         sendButton.setOnClickListener((v)->{
             String question = messageText.getText().toString().trim();
             addToChat(question,Message.SENT_BY_ME);
