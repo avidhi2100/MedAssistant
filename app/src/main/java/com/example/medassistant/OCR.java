@@ -2,6 +2,7 @@ package com.example.medassistant;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -40,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -82,6 +84,7 @@ public class OCR extends AppCompatActivity {
 
     private TextRecognizer textRecognizer;
     FirebaseAuth auth;
+    BottomNavigationView bottomNavigationView;
 
 //    CTakesMain medTagger;
 
@@ -92,7 +95,7 @@ public class OCR extends AppCompatActivity {
         setContentView(R.layout.activity_ocr);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
 
@@ -101,6 +104,46 @@ public class OCR extends AppCompatActivity {
         MaterialButton recognizeTextBtn = findViewById(R.id.recognizedTextBtn);
         imageView = findViewById(R.id.imageIv);
         recognizedTextEt = findViewById(R.id.recognizedTextEt);
+
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.menu_home) {
+                // Handle Home button click
+                Intent intent = new Intent(this, MedicinesActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (menuItem.getItemId() == R.id.menu_reminders) {
+                Intent intent = new Intent(this, HomeActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (menuItem.getItemId() == R.id.menu_chat) {
+                Intent intent = new Intent(this, ChatbotInterfaceActivity.class);
+                startActivity(intent);
+                return true;
+            }
+            else if (menuItem.getItemId() == R.id.menu_logout) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Confirmation")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Intent intent = new Intent(this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                return true;
+            }
+            return false;
+        });
+
+        bottomNavigationView.getMenu().findItem(R.id.menu_ocr).setChecked(true);
+
 
         cameraPermissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
 //        storagePermissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -432,5 +475,10 @@ public class OCR extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.getMenu().findItem(R.id.menu_ocr).setChecked(true);
 
+    }
 }

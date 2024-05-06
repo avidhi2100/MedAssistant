@@ -2,6 +2,7 @@ package com.example.medassistant;
 
 import android.annotation.SuppressLint;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -28,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     private DBHelper dbHelper;
     private FirebaseAuth auth;
     ListView reminderListView;
+    BottomNavigationView bottomNavigationView;
 
     @SuppressLint({"NonConstantResourceId", "MissingInflatedId"})
     @Override
@@ -44,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         reminderListView = findViewById(R.id.recyclerViewReminders);
 
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
             if (menuItem.getItemId() == R.id.menu_home) {
                 // Handle Home button click
@@ -58,23 +60,32 @@ public class HomeActivity extends AppCompatActivity {
             } else if (menuItem.getItemId() == R.id.menu_chat) {
                 Intent intent = new Intent(this, ChatbotInterfaceActivity.class);
                 startActivity(intent);
-//                Toast.makeText(HomeActivity.this, "Chat clicked", Toast.LENGTH_SHORT).show();
-                return true;
-            }
-            else if (menuItem.getItemId() == R.id.menu_reminders) {
-                // Handle Chat button click
-                Intent intent = new Intent(this, HomeActivity.class);
-                startActivity(intent);
                 return true;
             }
             else if (menuItem.getItemId() == R.id.menu_logout) {
-                // Handle Chat button click
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Confirmation")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Intent intent = new Intent(this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 return true;
             }
             return false;
         });
+
+        bottomNavigationView.getMenu().findItem(R.id.menu_reminders).setChecked(true);
+
+
 
         try {
             reminders = dbHelper.getAllReminders(auth.getCurrentUser().getEmail());
@@ -83,5 +94,12 @@ public class HomeActivity extends AppCompatActivity {
         }
         ReminderAdapter adapter = new ReminderAdapter(this, reminders);
         reminderListView.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.getMenu().findItem(R.id.menu_reminders).setChecked(true);
+
     }
 }

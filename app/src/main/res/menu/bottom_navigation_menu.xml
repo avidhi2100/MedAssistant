@@ -4,21 +4,20 @@
 
     <item
         android:id="@+id/menu_home"
-        android:title=""
-        android:icon="@drawable/baseline_person_24"
-        android:iconTint="@color/white"/>
+        android:title="Medicines"
+        android:icon="@drawable/medication"
+        />
 
     <item
         android:id="@+id/menu_ocr"
-        android:title=""
-        android:icon="@android:drawable/ic_input_add"        android:iconTint="@color/white"
+        android:title="Scan"
+        android:icon="@drawable/line_scan"
         />
 
     <item
         android:id="@+id/menu_chat"
-        android:title=""
-        android:icon="@android:drawable/stat_notify_chat"
-        android:iconTint="@color/white"/>
+        android:title="Chat"
+        android:icon="@drawable/message" />
 
     <item
         android:id="@+id/menu_reminders"
@@ -27,7 +26,7 @@
     <item
         android:id="@+id/menu_logout"
         android:title="Logout"
-        android:icon="@android:drawable/ic_menu_revert"
+        android:icon="@drawable/logout"
         />
 
 

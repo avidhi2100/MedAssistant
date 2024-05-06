@@ -30,6 +30,7 @@ public class MedicinesActivity extends AppCompatActivity {
 
     DBHelper dbHelper;
     FirebaseAuth auth;
+    BottomNavigationView bottomNavigationView;
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,15 +45,9 @@ public class MedicinesActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
         auth = FirebaseAuth.getInstance();
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.menu_home) {
-                // Handle Home button click
-                Intent intent = new Intent(this, MedicinesActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
-            } else if (menuItem.getItemId() == R.id.menu_ocr) {
+             if (menuItem.getItemId() == R.id.menu_ocr) {
                 Intent intent = new Intent(this, OCR.class);
                 startActivity(intent);
                 finish();
@@ -93,6 +88,10 @@ public class MedicinesActivity extends AppCompatActivity {
             return false;
         });
 
+        bottomNavigationView.getMenu().findItem(R.id.menu_home).setChecked(true);
+
+
+
         LinearLayout linearMedicines = findViewById(R.id.linearMedicines);
 
         List<Medicine> medicines = null;
@@ -122,4 +121,9 @@ public class MedicinesActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        bottomNavigationView.getMenu().findItem(R.id.menu_home).setChecked(true);
+    }
 }
