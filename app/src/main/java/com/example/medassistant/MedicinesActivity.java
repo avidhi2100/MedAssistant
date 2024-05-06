@@ -1,6 +1,8 @@
 package com.example.medassistant;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -48,27 +50,44 @@ public class MedicinesActivity extends AppCompatActivity {
                 // Handle Home button click
                 Intent intent = new Intent(this, MedicinesActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             } else if (menuItem.getItemId() == R.id.menu_ocr) {
                 Intent intent = new Intent(this, OCR.class);
                 startActivity(intent);
+                finish();
                 return true;
             } else if (menuItem.getItemId() == R.id.menu_chat) {
                 // Handle Chat button click
                 Intent intent = new Intent(this, ChatbotInterfaceActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             }
             else if (menuItem.getItemId() == R.id.menu_reminders) {
                 // Handle Chat button click
                 Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             }
             else if (menuItem.getItemId() == R.id.menu_logout) {
                 // Handle Chat button click
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Confirmation")
+                        .setMessage("Are you sure you want to logout?")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            Intent intent = new Intent(this, LoginActivity.class);
+                            startActivity(intent);
+                            finish();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> {
+                            dialog.dismiss();
+                        });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
                 return true;
             }
             return false;
@@ -102,4 +121,5 @@ public class MedicinesActivity extends AppCompatActivity {
 
 
     }
+
 }
