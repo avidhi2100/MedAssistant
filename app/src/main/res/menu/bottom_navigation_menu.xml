@@ -4,28 +4,28 @@
 
     <item
         android:id="@+id/menu_home"
-        android:title="Medicines"
+        android:title=""
         android:icon="@drawable/medication"
         />
 
     <item
         android:id="@+id/menu_ocr"
-        android:title="Scan"
+        android:title=""
         android:icon="@drawable/line_scan"
         />
 
     <item
         android:id="@+id/menu_chat"
-        android:title="Chat"
+        android:title=""
         android:icon="@drawable/message" />
 
     <item
         android:id="@+id/menu_reminders"
-        android:title="Reminders"
+        android:title=""
         android:icon="@android:drawable/ic_popup_reminder"/>
     <item
         android:id="@+id/menu_logout"
-        android:title="Logout"
+        android:title=""
         android:icon="@drawable/logout"
         />
 

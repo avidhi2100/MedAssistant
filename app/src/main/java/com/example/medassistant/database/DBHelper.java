@@ -168,6 +168,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 medicine.setId(cursor.getInt(cursor.getColumnIndex(M_COLUMN_ID)));
                 medicine.setMedicineName(cursor.getString(cursor.getColumnIndex(MEDICINE_NAME)));
+                medicine.setMedicineDosage(cursor.getString(cursor.getColumnIndex(MEDICINE_DOSAGE)));
                 medicine.setRoute(cursor.getString(cursor.getColumnIndex(MEDICINE_ROUTE)));
                 medicine.setRefillDate(cursor.getString(cursor.getColumnIndex(MEDICINE_REFILL_DATE)));
                 medicine.setDoctorName(cursor.getString(cursor.getColumnIndex(MEDICINE_DOCTOR_NAME)));
@@ -190,6 +191,7 @@ public class DBHelper extends SQLiteOpenHelper {
             medicine = new Medicine();
             medicine.setId(cursor.getInt(cursor.getColumnIndex(M_COLUMN_ID)));
             medicine.setMedicineName(cursor.getString(cursor.getColumnIndex(MEDICINE_NAME)));
+            medicine.setMedicineDosage(cursor.getString(cursor.getColumnIndex(MEDICINE_DOSAGE)));
             medicine.setRoute(cursor.getString(cursor.getColumnIndex(MEDICINE_ROUTE)));
             medicine.setRefillDate(cursor.getString(cursor.getColumnIndex(MEDICINE_REFILL_DATE)));
             medicine.setDoctorName(cursor.getString(cursor.getColumnIndex(MEDICINE_DOCTOR_NAME)));
@@ -198,6 +200,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         db.close();
         return medicine;
+    }
+
+    public void deleteMedicine(long medicineId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = M_COLUMN_ID + " = ?";
+        String[] whereArgs = new String[]{String.valueOf(medicineId)};
+        db.delete(TABLE_MEDICINE, whereClause, whereArgs);
+        db.close();
     }
 
 

@@ -77,12 +77,10 @@ public class ChatbotInterfaceActivity extends AppCompatActivity {
         llm.setStackFromEnd(true);
         recycleView.setLayoutManager(llm);
 
-backButton.setOnClickListener((v)->
-{
-    Intent intent = new Intent(this, HomeActivity.class);
-    startActivity(intent);
-    finish();
-});
+        backButton.setOnClickListener((v)-> {
+            finish();
+        });
+
         sendButton.setOnClickListener((v)->{
             String question = messageText.getText().toString().trim();
             addToChat(question,Message.SENT_BY_ME);

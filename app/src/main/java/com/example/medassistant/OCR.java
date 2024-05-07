@@ -218,6 +218,7 @@ public class OCR extends AppCompatActivity {
                                     Medicine medicine = objectMapper.readValue(responseData, Medicine.class);
                                     medicine.setUserEmail(Objects.requireNonNull(auth.getCurrentUser()).getEmail());
                                     dbHelper.addMedicine(medicine);
+                                    Toast.makeText(OCR.this, "New Medicine Added", Toast.LENGTH_SHORT).show();
 
                                 }).execute(detectedText);
                             } else {

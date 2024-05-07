@@ -101,7 +101,7 @@ public class MedicinesActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        medicines.add(new Medicine(1,"Amoxylin","2x PER Day","ORAL","08-12-2024","Not present","vidhi0821@gmail.com"));
+//        medicines.add(new Medicine(1,"Amoxylin","2x PER Day","ORAL","08-12-2024","Not present","vidhi0821@gmail.com"));
 
         for (Medicine medicine : medicines) {
             View medicineBlock = getLayoutInflater().inflate(R.layout.item_medicine_block, null);
@@ -114,6 +114,7 @@ public class MedicinesActivity extends AppCompatActivity {
                 intent.putExtra("medicineId", medicine.getId());
                 startActivity(intent);
             });
+
 
             linearMedicines.addView(medicineBlock);
         }

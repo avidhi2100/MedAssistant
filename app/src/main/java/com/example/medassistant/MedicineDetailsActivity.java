@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -71,9 +73,13 @@ public class MedicineDetailsActivity extends AppCompatActivity {
         TextView textViewMedicineRefillDate = findViewById(R.id.refillDateTextView);
         TextView textViewMedicineDoctorName = findViewById(R.id.doctorNameTextView);
         backButton=findViewById(R.id.back_button);
+        ImageView deleteMedicine = findViewById(R.id.imageViewDelete);
+        
+        
+
         backButton.setOnClickListener((v)->
         {
-            Intent intent = new Intent(this, HomeActivity.class);
+            Intent intent = new Intent(this, MedicinesActivity.class);
             startActivity(intent);
             finish();
         });
@@ -82,6 +88,27 @@ public class MedicineDetailsActivity extends AppCompatActivity {
         Intent intent = this.getIntent();
         Long medicineId = intent.getLongExtra("medicineId", 0);
         Medicine medicine = dbHelper.getMedicineById(medicineId);
+        
+        deleteMedicine.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Confirmation")
+                    .setMessage("Are you sure you want to delete?")
+                    .setPositiveButton("Yes", (d, w) -> {
+                        dbHelper.deleteMedicine(medicineId);
+                        Toast.makeText(this, "Medicine deleted successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent3 = new Intent(this, MedicinesActivity.class);
+                        startActivity(intent3);
+                        finish();
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> {
+                        dialog.dismiss();
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        });
+        
 //        Medicine medicine = new Medicine(1,"Amoxylin","2x PER Day","ORAL","08-12-2024","Not present","vidhi0821@gmail.com");
 
         textViewMedicineName.setText(medicine.getMedicineName());
